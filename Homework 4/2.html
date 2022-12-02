@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Homework 4.2</title>
+</head>
+<body>
+<!--
+Необязательное задание, но желательно сделать.
+
+Необходимо данное задание выполнить в es5 стиле и в es6 стиле.
+Необходимо создать функцию-конструктор/класс для поста в социальной сети.
+Названия: `PostES5` для es5 стиля и `PostES6` для es6 стиля.
+Пост должен хранить:
+1. Автора поста (имени достаточно).
+2. Текст поста.
+3. Дату и время последнего изменения поста.
+Данные автора поста и текст поста необходимо передавать при создании
+экземпляра объекта.
+Каждому экземпляру объекта должен быть доступен метод `edit`, который будет
+менять текст поста.
+
+---
+
+Необходимо создать функцию-конструктор/класс для закрепленного поста в
+социальной сети.
+Названия: `AttachedPostES5` для es5 стиля и `AttachedPostES6` для es6 стиля.
+Закрепленный пост должен наследоваться от обычного поста.
+Данные автора поста и текст поста необходимо передавать при создании
+экземпляра объекта.
+Закрепленный пост должен иметь свойство `highlighted`, в котором по умолчанию
+будет лежать значение false (это свойство будет обозначать, будет ли наш
+закрепленный пост подсвечен).
+У экземпляров объекта закрепленного поста должен быть метод с названием
+`makeTextHighlighted`, который сделает так, чтобы наш пост стал подсвеченным
+(будет менять свойство `highlighted`).
+
+---
+
+Подсказки:
+1. Задание сложное, советую делать по аналогии с примером на онлайн-занятии.
+2. Обратите внимание что пост хранит "дату и время последнего изменения
+поста", это значит что если пост кто-то изменит (например вызовет какой-то
+метод, который изменит что-то в посте), дата и время последнего изменения
+поста также должна измениться.
+3. Выполняйте все по порядку, не стоит пытаться сделать все сразу, иначе можно
+что-нибудь пропустить.
+4. Если непонятно условие - задайте вопрос.
+-->
+<script>
+  "use strict";
+
+  function textEditEmulator(post, text) {
+    setTimeout(() => console.log(`${post.autorName} читает, что написал`), 500);
+    setTimeout(() => console.log(`${post.autorName} начал думать, что хорошо получилось`), 1000);
+    setTimeout(() => console.log(`${post.autorName} передумал`), 1500);
+    setTimeout(() => console.log(`${post.autorName} начал паниковать`), 2000);
+    setTimeout(() => console.log(`${post.autorName} начал исправлять текст`), 2500);
+    setTimeout(() => post.edit(text), 3000);
+    setTimeout(() => console.log(post), 3500);
+    setTimeout(() => console.log(`${post.autorName} исправив текст - успокоился`), 4000);
+  }
+
+  function PostES5(autorName, text) {
+    this.autorName = autorName;
+    this.text = text;
+    this.dateTime = new Date();
+  }
+
+  PostES5.prototype.edit = function (newText) {
+    this.text = newText;
+    this.dateTime = new Date();
+  }
+
+  class PostES6 {
+    constructor(autorName, text) {
+      this.autorName = autorName;
+      this.text = text;
+      this.dateTime = new Date();
+    }
+
+    edit(newText) {
+      this.text = newText;
+      this.dateTime = new Date();
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////
+
+  function AttachedPostES5(autorName, text) {
+    PostES5.call(this, autorName, text);
+    this.highlighted = false;
+  }
+
+  AttachedPostES5.prototype = Object.create(PostES5.prototype);
+  AttachedPostES5.prototype.constructor = AttachedPostES5;
+
+  AttachedPostES5.prototype.makeTextHighlighted = function () {
+    this.highlighted = true;
+    this.dateTime = new Date();
+  }
+
+  class AttachedPostES6 extends PostES6 {
+    constructor(autorName, text) {
+      super(autorName, text);
+      this.highlighted = false;
+    }
+
+    makeTextHighlighted = function () {
+      this.highlighted = true;
+      this.dateTime = new Date();
+    }
+  }
+
+  // ПРОВЕРКА
+
+  const postES5_1 = new PostES5("Mike", "Lorem 1");
+  console.log(postES5_1);
+  textEditEmulator(postES5_1, "lorem_2");
+
+  console.log("***********************************************");
+
+  const postES6_1 = new PostES6("John", "Lorem 12");
+  console.log(postES6_1);
+  textEditEmulator(postES6_1, "lorem_22");
+
+  console.log("***********************************************");
+
+  const attachedPostES5 = new AttachedPostES5("Stan", "Some text");
+  console.log(attachedPostES5);
+  attachedPostES5.edit("new_text");
+  attachedPostES5.makeTextHighlighted();
+  console.log(attachedPostES5);
+
+  console.log("***********************************************");
+
+  const attachedPostES6 = new AttachedPostES6("Kenny", "Bad joke");
+  console.log(attachedPostES6);
+  attachedPostES6.edit("Good joke");
+  attachedPostES6.makeTextHighlighted();
+  console.log(attachedPostES6);
+
+</script>
+</body>
+</html>
