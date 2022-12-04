@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Homework 4.3</title>
+</head>
+<body>
+<!--
+Необязательное задание.
+
+Необходимо создать функцию getDigitsOfNumber, которая принимает целое
+положительное число в диапазоне от 0 до 1000.
+Функция должна вернуть обычный объект с тремя свойствами:
+1. units - содержит число, количество единиц в параметре функции.
+2. dozens - содержит число, количество десятков в параметре функции.
+3. hundreds - содержит число, количество сотен в параметре функции.
+Если функции было передано не целое положительное число, либо число в ином
+диапазоне, нежели задано в условии, функция должна вывести в консоль информацию
+об ошибке и вернуть пустой объект.
+Необходимо также прописать jsdoc для данной функции.
+
+Подсказка:
+У объекта console есть разные методы, мы часто используем console.log для того
+чтобы вывести в консоль какое-то значение, однако есть и другие методы, найдите
+в интернете какие методы существуют и используйте "правильный метод" в нужном
+месте. Обратите внимание что функция не должна выбрасывать ошибку, она должна
+только вывести в консоль информацию о том, что что-то пошло не так.
+Обратите внимание на слова "от 0 до 1000", это означает диапазон [0, 999], что
+можно прочитать как "от нуля до 999 включительно".
+-->
+<script>
+  "use strict";
+
+  class MyNumber {
+    constructor(number) {
+      if (this.isValueCorrect(number)) {
+        this.hundreds = Math.floor(number / 100);
+        this.dozens = Math.floor((number - this.hundreds * 100) / 10);
+        this.units = Math.floor(number - this.hundreds * 100 
+                                - this.dozens * 10);
+      }
+    }
+
+    isValueCorrect(value) {
+      if (Number.isInteger(value) && value >= 0 && value < 1000) {
+        return true;
+      }
+      else {
+        console.error("Неверный тип данных! " +
+                    "Должно быть целое число в пределах от " +
+                    "0 до 999 включительно." +
+                    `Передано значение - '${value}'`);
+        return false;
+      }
+    }
+  }
+
+  /**
+  * Функция разделения числа на сотни, десятки и единицы
+  * 
+  * @param {number} number - строго целое число в диапазоне [0, 999]
+  * @returns {MyNumber} - объект содержащий количество:
+  *                       сотен - hundreds
+  *                       десятков - dozens
+  *                       единиц - units
+  *                       переданного числа number
+  */
+  function getDigitsOfNumber(number) {
+    return new MyNumber(number);
+  }
+
+  const number1 = getDigitsOfNumber(384);
+  console.log(number1);
+  const number2 = getDigitsOfNumber(1234);
+  console.log(number2);
+  const number3 = getDigitsOfNumber(-42);
+  console.log(number3);
+  const number4 = getDigitsOfNumber(12.34);
+  console.log(number4);
+  const number5 = getDigitsOfNumber(269);
+  console.log(number5);
+  const number6 = getDigitsOfNumber(28);
+  console.log(number6);
+  const number7 = getDigitsOfNumber(6);
+  console.log(number7);
+
+</script>
+</body>
+</html>
